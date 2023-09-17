@@ -1,0 +1,112 @@
+<html>
+<head><title>Тест из нескольких задач по математике</title>
+<style>
+p {
+ font-size:24px;
+}
+input {
+ font-size:24px;
+}
+</style>
+
+</head>
+
+<body style="background-color:#d9ffd6;">
+
+<div id="vopros1" style="display:block;">
+<p>Вычислите определитель матрицы:</p>
+<p>
+
+<script>
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random()*(max-min))+min;
+}
+
+var n = getRandomInt(2,2);
+
+var matrix_1 = [];
+for (var i = 0; i < n*n; i++) {
+    matrix_1[i] = getRandomInt(-7,7);
+}
+
+</script>
+
+
+<div style="float:left; width: 70px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 20px;">
+A =
+</div>
+
+<div style="float:left;  width: 100px; font-size: 40px; margin-left: 20px;">
+<script>
+
+for (var i = 0; i < n*n; i++) {
+    if (i % n != n-1) {
+       document.write(matrix_1[i] + '  ');
+    }
+    else {
+        document.write(matrix_1[i] + '<br>');
+    }
+}
+
+</script>
+</div>
+
+
+<div style="float:up; width: 250px; font-size: 40px; margin-top: 10px; margin-left: 20px;">
+det(A) = <input style="width: 100px;" id="input_1">
+</div>
+
+</p>
+</div>
+
+
+<div style="float:up; font-size: 40px; margin-top: 0px; margin-left: 10px; margin-right: 10px;">
+<button onclick="proverit();">Проверить</button>
+<div id="rezultat"></div>
+</div>
+
+<script>
+
+function proverit(){
+
+var ball = 0;
+
+var answer = matrix_1[0]*matrix_1[3] - matrix_1[1]*matrix_1[2];
+
+var given_answer = document.getElementById('input_1').value;
+var given_answer_field = document.getElementById('input_1');
+
+if(given_answer == answer) {
+    ball +=1;
+    given_answer_field.setAttribute("style", "color: green; width: 100px;");
+}
+else {
+    given_answer_field.setAttribute("style", "color: red; width: 100px;")   
+}
+
+
+var percent_right = Math.floor(100*ball);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+</script>
+
+</body>
+</html>

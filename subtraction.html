@@ -1,0 +1,180 @@
+<html>
+<head><title>Тест из нескольких задач по математике</title>
+<style>
+p {
+ font-size:24px;
+}
+input {
+ font-size:24px;
+}
+</style>
+
+</head>
+
+<body style="background-color:#d9ffd6;">
+
+<div id="vopros1" style="display:block;">
+<p>Вычислите разность матриц:</p>
+<p>
+
+<script>
+
+/*
+<ul>
+<li> <a href="test2.html">Ссылка 1</a> </li>
+</ul>
+*/
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random()*(max-min))+min;
+}
+
+
+function print_matrix(){
+    var w = Math.floor(100/m) - 6 ;
+    for (var i = 0; i < n*m; i++) {
+        var x = document.getElementById("form");
+                // создаем новое поле ввода
+        var new_field = document.createElement("input");
+                // установим для поля ввода тип данных 'text'
+        new_field.setAttribute("type", "text");
+        new_field.setAttribute("style", "width: "+ w +"%;");
+        new_field.setAttribute("id", "input_"+i);
+                // установим имя для поля ввода
+        new_field.setAttribute("name", "text_field[]");
+                // определим место вставки нового поля ввода (перед каким элементом его вставить)
+        var pos = x.childElementCount;
+
+                // добавим поле ввода в форму
+        x.append(new_field);
+    }
+}
+
+
+var n = getRandomInt(2,4);
+var m = getRandomInt(2,4);
+var k = n*m;
+
+var matrix_1 = [];
+for (var i = 0; i < k; i++) {
+    matrix_1[i] = getRandomInt(-7,7);
+}
+
+var matrix_2 = [];
+for (var i = 0; i < k; i++) {
+    matrix_2[i] = getRandomInt(-7,7);
+}
+
+</script>
+
+
+<div style="float:left; font-size: 40px; height: 240px; margin-left: 20px;">
+<script>
+
+for (var i = 0; i < k; i++) {
+    if (i % m != m-1) {
+       document.write(matrix_1[i] + '  ');
+    }
+    else {
+        document.write(matrix_1[i] + '<br>');
+    }
+}
+
+</script>
+</div>
+
+
+<div style="float:left; width: 50px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 20px;">
+-
+</div>
+
+
+<div style="float:left; font-size: 40px; height: 240px; margin-left: 20px;">
+<script>
+
+
+for (var i = 0; i < k; i++) {
+    if (i % m != m-1) {
+       document.write(matrix_2[i] + '  ');
+    }
+    else {
+        document.write(matrix_2[i] + '<br>');
+    }
+}
+
+</script>
+</div>
+
+
+<div style="float:left; width: 50px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 20px; margin-right: 20px;">
+=
+</div>
+
+
+<form style="float:left; width: 300px;" id="form" method="POST">
+</form>
+
+
+<div style="float:left;">
+<script>
+    print_matrix();
+</script>
+</div>
+
+
+</p>
+</div>
+
+
+<div style="position: absolute; font-size: 40px; margin-top: 150px; margin-left: 10px; margin-right: 10px;">
+<button onclick="proverit();">Проверить</button>
+<div id="rezultat"></div>
+</div>
+
+<script>
+
+function proverit(){
+
+var ball = 0;
+
+var w = Math.floor(100/m) - 6 ;
+
+for (var i = 0; i < n*m; i++) {
+    var given_answer = document.getElementById('input_'+i).value;
+    var given_answer_field = document.getElementById('input_'+i)
+    if(given_answer == matrix_1[i]-matrix_2[i]) {
+        ball +=1;
+        given_answer_field.setAttribute("style", "color: green; width: "+w+"%;");
+    }
+    else {
+        given_answer_field.setAttribute("style", "color: red; width: "+w+"%;");
+    }
+}
+
+
+var vsego_zadach = n*m;
+
+var percent_right = Math.floor(100*ball/vsego_zadach);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+</script>
+
+</body>
+</html>
