@@ -61,11 +61,11 @@ function Determinant(n,A)
 var n = getRndmFromSet([2,2,3,3,3,4]);
 
 var matrix_1 = [];
-for (var i = 0; i < n*n; i++) {
+for (var i = 0; i < n; i++) {
     matrix_1[i] = [];
 }
 for (var i = 0; i < n; i++) {
-    for (var j = 0; j < n*n; j++) {
+    for (var j = 0; j < n; j++) {
         matrix_1[i][j] = getRandomInt(-7,7);
     }
 }
