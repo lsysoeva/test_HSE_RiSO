@@ -160,6 +160,9 @@ document.write('X = ');
 
 <div style="position: absolute; font-size: 40px; margin-top: 10px; margin-left: 10px; margin-right: 10px;">
 <button onclick="proverit();">Проверить</button>
+<button onClick="window.location.reload();">Следующая задача</button>
+<div style=" width: 550px; font-size: 20px; margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+Ответ можно вводить в виде десятичной дроби с разделителем "." или "," БЕЗ округления (!) или в виде дроби (вида A/B или A+B/C).</div>
 <div id="rezultat"></div>
 </div>
 
@@ -183,12 +186,12 @@ for (var i = 0; i < n*k; i++) {
 
 var answer = [];
 for (var i = 0; i < n*k; i++) {
-    answer[i] = (matrix_3[i]-product[i])/lambda
+    answer[i] = (matrix_3[i]-product[i])/lambda ;
 }
 
 for (var i = 0; i < n*k; i++) {
-    var given_answer = document.getElementById('input_'+i).value;
-    var given_answer_field = document.getElementById('input_'+i)
+    var given_answer = eval(document.getElementById('input_'+i).value.replace(',','.'));
+    var given_answer_field = document.getElementById('input_'+i);
     if(given_answer == answer[i]) {
         ball +=1;
         given_answer_field.setAttribute("style", "color: green; width: "+w+"%;");
