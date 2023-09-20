@@ -23,11 +23,51 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random()*(max-min))+min;
 }
 
-var n = getRandomInt(2,2);
+function getRndmFromSet(set)
+{
+    var rndm = Math.floor(Math.random() * set.length);
+    return set[rndm];
+}
+
+
+
+
+function Determinant(n,A)
+{
+    var subA = [];
+    var detA = 0;
+    if (n==1) return A[0][0];
+    if (n==2) return (A[0][0]*A[1][1]-A[0][1]*A[1][0]);
+    else
+    {
+    for (var i=0; i<n; i++)
+        { for (var h=0; h<n-1; h++) 
+              {subA[h]=[];}
+          for (var a=1; a<n; a++)
+              { for (var b=0; b<n; b++)
+                    { if (b<i)       subA[a-1][b] = A[a][b];
+                      else if (b>i)  subA[a-1][b-1] = A[a][b];
+                    }
+              }
+          var sign = (i%2==0) ? 1 : -1;
+          detA = detA + sign * A[0][i] * Determinant(n-1,subA);
+        }
+    return detA;
+    }
+}
+
+
+
+var n = getRandomInt(2,5);
 
 var matrix_1 = [];
 for (var i = 0; i < n*n; i++) {
-    matrix_1[i] = getRandomInt(-7,7);
+    matrix_1[i] = [];
+}
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n*n; j++) {
+        matrix_1[i][j] = getRandomInt(-7,7);
+    }
 }
 
 </script>
@@ -37,16 +77,14 @@ for (var i = 0; i < n*n; i++) {
 A =
 </div>
 
-<div style="float:left;  width: 100px; font-size: 40px; margin-left: 20px;">
+<div style="float:left;  width: 300px; font-size: 40px; margin-left: 20px;">
 <script>
 
-for (var i = 0; i < n*n; i++) {
-    if (i % n != n-1) {
-       document.write(matrix_1[i] + '  ');
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+       document.write(matrix_1[i][j] + '  ');
     }
-    else {
-        document.write(matrix_1[i] + '<br>');
-    }
+    document.write('<br>');
 }
 
 </script>
@@ -63,6 +101,7 @@ det(A) = <input style="width: 100px;" id="input_1">
 
 <div style="float:up; font-size: 40px; margin-top: 0px; margin-left: 10px; margin-right: 10px;">
 <button onclick="proverit();">Проверить</button>
+<button onClick="window.location.reload();">Следующая задача</button>
 <div id="rezultat"></div>
 </div>
 
@@ -72,7 +111,7 @@ function proverit(){
 
 var ball = 0;
 
-var answer = matrix_1[0]*matrix_1[3] - matrix_1[1]*matrix_1[2];
+var answer = Determinant(n,matrix_1);
 
 var given_answer = document.getElementById('input_1').value;
 var given_answer_field = document.getElementById('input_1');
