@@ -1,0 +1,759 @@
+<html>
+<head><title>Тест из нескольких задач по математике</title>
+<style>
+p {
+ font-size:24px;
+}
+input {
+ font-size:24px;
+}
+</style>
+
+</head>
+
+<body style="background-color:#d9ffd6;">
+
+
+
+
+
+
+
+<script>
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random()*(max-min))+min;
+}
+
+function getRndmFromSet(set)
+{
+    var rndm = Math.floor(Math.random() * set.length);
+    return set[rndm];
+}
+
+
+function Determinant(n,A)
+{
+    var subA = [];
+    var detA = 0;
+    if (n==1) return A[0][0];
+    if (n==2) return (A[0][0]*A[1][1]-A[0][1]*A[1][0]);
+    else
+    {
+    for (var i=0; i<n; i++)
+        { for (var h=0; h<n-1; h++) 
+              {subA[h]=[];}
+          for (var a=1; a<n; a++)
+              { for (var b=0; b<n; b++)
+                    { if (b<i)       subA[a-1][b] = A[a][b];
+                      else if (b>i)  subA[a-1][b-1] = A[a][b];
+                    }
+              }
+          var sign = (i%2==0) ? 1 : -1;
+          detA = detA + sign * A[0][i] * Determinant(n-1,subA);
+        }
+    return detA;
+    }
+}
+
+
+
+function Algebraicheskie_dopolnenia(A)
+{
+var sub_matrix = [];
+var alg_dopolnenia = [];
+for (var i = 0; i < n-1; i++) {
+    sub_matrix[i] = [];
+}
+for (var i = 0; i < n; i++) {
+    alg_dopolnenia[i] = [];
+}
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        for (var a = 0; a < n-1; a++) {
+            for (var b = 0; b < n-1; b++) {
+                if (a<i && b<j)  
+                    {sub_matrix[a][b] = A[a][b];}
+                else if (a<i && b>=j)  
+                    {sub_matrix[a][b] = A[a][b+1];}
+                else if (a>=i && b<j)  
+                    {sub_matrix[a][b] = A[a+1][b];}
+                else if (a>=i && b>=j)  
+                    {sub_matrix[a][b] = A[a+1][b+1];}
+            }
+        }
+        var sign = ((i+j)%2==0) ? 1 : -1;
+        alg_dopolnenia[i][j] = sign*Determinant(n-1,sub_matrix);
+    }
+}
+return alg_dopolnenia;
+}
+
+
+function Product_Matrix(A,B,n,m,k)
+{
+var result = [];
+for (var i = 0; i < n; i++) {
+    result[i] = [];
+}
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < k; j++) {
+        result[i][j]=0;
+        for (var h = 0; h < m; h++) {
+            result[i][j] = result[i][j] + A[i][h]*B[h][j];
+        }
+    }
+}
+return result;
+}
+
+
+
+
+function Reverse_Matrix(A)
+{
+var detA = 0;
+var alg_dopolnenia = [];
+for (var i = 0; i < n; i++) {
+    alg_dopolnenia[i] = [];
+}
+var reverse_matrix = [];
+for (var i = 0; i < n; i++) {
+    reverse_matrix[i] = [];
+}
+alg_dopolnenia = Algebraicheskie_dopolnenia(A);
+detA = Determinant(n,A);
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        reverse_matrix[i][j] = alg_dopolnenia[j][i] / detA;
+    }
+}
+return reverse_matrix;
+}
+
+
+
+
+function print_matrix_alg_dop(n,m,k){
+    var w = Math.floor(100/m) - 15 ;
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j < n; j++) {
+            var x = document.getElementById("form_alg_dop"+k);
+                // создаем новое поле ввода
+            var new_field_name = "A_"+(i+1)+(j+1)+" = ";
+            var new_field = document.createElement("input");
+                // установим для поля ввода тип данных 'text'
+            new_field.setAttribute("type", "text");
+            new_field.setAttribute("style", "width: "+ w +"%;");
+            new_field.setAttribute("id", "alg_dop"+k+"_"+i+"_"+j);
+                // установим имя для поля ввода
+            new_field.setAttribute("name", "text_field[]");
+                // определим место вставки нового поля ввода (перед каким элементом его вставить)
+            var pos = x.childElementCount;
+                // добавим поле ввода в форму
+            x.append(new_field_name);
+            x.append(new_field);
+        }
+    }
+}
+
+
+function print_matrix_reverse_matrix(n,m,k){
+    var w = Math.floor(100/m) - 6 ;
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j < n; j++) {
+            var x = document.getElementById("form_reverse_matrix"+k);
+                // создаем новое поле ввода
+            var new_field = document.createElement("input");
+                // установим для поля ввода тип данных 'text'
+            new_field.setAttribute("type", "text");
+            new_field.setAttribute("style", "width: "+ w +"%;");
+            new_field.setAttribute("id", "reverse_matrix"+k+"_"+i+"_"+j);
+                // установим имя для поля ввода
+            new_field.setAttribute("name", "text_field[]");
+                // определим место вставки нового поля ввода (перед каким элементом его вставить)
+            var pos = x.childElementCount;
+                // добавим поле ввода в форму
+            x.append(new_field);
+        }
+    }
+}
+
+function print_matrix_answer(n,m){
+    var w = Math.floor(100/m) - 6 ;
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j < n; j++) {
+            var x = document.getElementById("form_answer");
+                // создаем новое поле ввода
+            var new_field = document.createElement("input");
+                // установим для поля ввода тип данных 'text'
+            new_field.setAttribute("type", "text");
+            new_field.setAttribute("style", "width: "+ w +"%;");
+            new_field.setAttribute("id", "answer_"+i+"_"+j);
+                // установим имя для поля ввода
+            new_field.setAttribute("name", "text_field[]");
+                // определим место вставки нового поля ввода (перед каким элементом его вставить)
+            var pos = x.childElementCount;
+                // добавим поле ввода в форму
+            x.append(new_field);
+        }
+    }
+}
+
+var variables = [];
+variables[0] = 'x';
+variables[1] = 'y';
+variables[2] = 'z';
+
+function print_answer_system(n){
+    for (var i = 0; i < n; i++) {
+            var x = document.getElementById("form_answer_system");
+                // создаем новое поле ввода
+            var new_field = document.createElement("input");
+            var new_field_name = variables[i]+" = ";
+                // установим для поля ввода тип данных 'text'
+            new_field.setAttribute("type", "text");
+//            new_field.setAttribute("style", "width: 95%;");
+            new_field.setAttribute("id", "answer_system_"+i);
+                // установим имя для поля ввода
+            new_field.setAttribute("name", "text_field[]");
+                // определим место вставки нового поля ввода (перед каким элементом его вставить)
+            var pos = x.childElementCount;
+                // добавим поле ввода в форму
+            x.append(new_field_name);
+            x.append(new_field);
+    }
+}
+
+
+
+
+var n = getRandomInt(2,4);
+
+var matrix_A = [];
+var matrix_B = [];
+var matrix_C = [];
+var matrix_D = [];
+
+for (var i = 0; i < n; i++) {
+    matrix_A[i] = [];
+    matrix_B[i] = [];
+    matrix_C[i] = [];
+    matrix_D[i] = [];
+}
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        matrix_A[i][j] = getRandomInt(-7,7);
+        matrix_B[i][j] = getRandomInt(-7,7);
+        matrix_C[i][j] = getRandomInt(-7,7);
+        matrix_D[i][j] = getRandomInt(-7,7);
+    }
+}
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="font-size: 22px; font-weight:bold; margin-left: 20px;">
+Решите матричное уравнение:
+</div>
+
+
+
+<div style="float:left; width: 150px; text-align: center; font-size: 40px; margin-top: 0px; margin-left: 20px;">
+<script>
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+       document.write(matrix_C[i][j] + '  ');
+    }
+    document.write('<br>');
+}
+</script>
+</div>
+
+<div style="float:left; width: 50px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 0px;">
+-
+</div>
+
+
+<div style="float:left; width: 150px; text-align: center; font-size: 40px; margin-top: 0px; margin-left: 0px;">
+<script>
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+       document.write(matrix_A[i][j] + '  ');
+    }
+    document.write('<br>');
+}
+</script>
+</div>
+
+<div style="float:left; width: 100px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 0px;">
+ * X * 
+</div>
+
+<div style="float:left; width: 150px; text-align: center; font-size: 40px; margin-top: 0px; margin-left: 0px;">
+<script>
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+       document.write(matrix_B[i][j] + '  ');
+    }
+    document.write('<br>');
+}
+</script>
+</div>
+
+<div style="float:left; width: 50px; text-align: center; font-size: 40px; margin-top: 30px; margin-left: 0px;">
+ = 
+</div>
+
+
+<div style="float:left; width: 150px; text-align: center; font-size: 40px; margin-top: 0px; margin-left: 0px;">
+<script>
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+       document.write(matrix_D[i][j] + '  ');
+    }
+    document.write('<br>');
+}
+</script>
+</div>
+
+
+</script>
+</div>
+
+
+
+
+
+
+
+
+<table>
+
+<tr>
+<td>
+<div style="font-size: 16px; margin-left: 30px;">
+Определитель левого множителя: <br>
+</div>
+
+<div style="float:left; width: 300px; font-size: 40px; margin-top: 10px; margin-left: 30px; margin-right: 10px;">
+det(A) = 
+<input style="width: 100px;" id="input_det1">
+
+<button onclick="proverit_det(matrix_A,1);">Проверить определитель</button>
+</div>
+</td>
+
+<td>
+<div style="font-size: 16px; margin-left: -20px;">
+Определитель правого множителя: <br>
+</div>
+
+<div style="float:left; width: 300px; font-size: 40px; margin-top: 10px; margin-left: -20px; margin-right: 10px;">
+det(B) = 
+<input style="width: 100px;" id="input_det2">
+
+<button onclick="proverit_det(matrix_B,2);">Проверить определитель</button>
+</div>
+</td>
+
+</tr>
+
+
+
+<tr>
+<td>
+<form style="float:up; font-size: 16px; width: 400px; margin-top: 10px; margin-left: 30px; margin-right: 10px;" id="form_alg_dop1" method="POST">
+Матрица алгебраических дополнений левого множителя: <br>
+</form>
+
+<div style="float:left; font-size: 40px; margin-top: 0px; margin-left: 30px; margin-right: 10px;">
+<script>
+    print_matrix_alg_dop(n,n,1);
+</script>
+
+<button onclick="proverit_alg_dop(matrix_A,1);">Проверить алгебраические дополнения</button>
+</div>
+</td>
+
+<td>
+<form style="float:up; font-size: 16px; width: 400px; margin-top: 10px; margin-left: -20px; margin-right: 10px;" id="form_alg_dop2" method="POST">
+Матрица алгебраических дополнений правого множителя: <br>
+</form>
+
+<div style="float:left; font-size: 40px; margin-top: 0px; margin-left: -20px; margin-right: 10px;">
+<script>
+    print_matrix_alg_dop(n,n,2);
+</script>
+
+<button onclick="proverit_alg_dop(matrix_B,2);">Проверить алгебраические дополнения</button>
+</div>
+</td>
+
+</tr>
+
+
+
+<tr>
+<td>
+<form style="float:up; width: 400px; margin-top: 10px; margin-left: 30px; margin-right: 10px;" id="form_reverse_matrix1" method="POST">
+Обратная матрица для левого множителя: <br>
+</form>
+
+<div style="float:left;">
+<script>
+    print_matrix_reverse_matrix(n,n,1);
+</script>
+</div>
+
+<div style="float:up; font-size: 40px; margin-top: 10px; margin-left: 30px; margin-right: 10px;">
+<button onclick="proverit_reverse_matrix(matrix_A,1);">Проверить обратную матрицу</button>
+</div>
+</td>
+
+
+<td>
+<form style="float:up; width: 400px; margin-top: 10px; margin-left: -20px; margin-right: 10px;" id="form_reverse_matrix2" method="POST">
+Обратная матрица для правого множителя: <br>
+</form>
+
+<div style="float:left; margin-left: -20px;">
+<script>
+    print_matrix_reverse_matrix(n,n,2);
+</script>
+</div>
+
+<div style="float:up; font-size: 40px; margin-top: 10px; margin-left: -20px; margin-right: 10px;">
+<button onclick="proverit_reverse_matrix(matrix_B,2);">Проверить обратную матрицу</button>
+</div>
+</td>
+
+</tr>
+
+</table>
+
+
+<form style="float:up; font-size: 16px; width: 300px; margin-top: 10px; margin-left: 30px; margin-right: 10px;" id="form_answer" method="POST">
+Ответ: X = <br>
+</form>
+
+
+<div style="float:left; width: 400px; font-size: 40px; margin-top: 0px; margin-left: -20px; margin-right: 10px;">
+<script>
+    print_matrix_answer(n,n);
+</script>
+</div>
+
+<div style="float:up; font-size: 40px; margin-top: 10px; margin-left: 30px; margin-right: 10px;">
+<button onclick="proverit_answer(matrix_A,matrix_B,matrix_C,matrix_D);">Проверить ответ</button>
+<button onClick="window.location.reload();">Следующая задача</button>
+</div>
+
+<div style="float:left; width: 900px; font-size: 16px; margin-top: 10px; margin-left: 30px; margin-right: 10px;">
+Ответы для обратной матрицы и для X можно вводить в виде десятичной дроби с разделителем "." или "," БЕЗ округления (!) или в виде дроби (вида A/B или A+B/C).</div>
+
+
+<div id="rezultat" style="font-size: 40px; color:blue"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+function proverit_det(A,k){
+
+var ball = 0;
+
+var answer = Determinant(n,A);
+
+var given_answer = document.getElementById('input_det'+k).value;
+var given_answer_field = document.getElementById('input_det'+k);
+
+if(given_answer == answer) {
+    ball +=1;
+    given_answer_field.setAttribute("style", "color: green; width: 100px;");
+}
+else {
+    given_answer_field.setAttribute("style", "color: red; width: 100px;")   
+}
+
+
+var percent_right = Math.floor(100*ball);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+
+
+
+function proverit_alg_dop(A,k){
+
+var w = Math.floor(100/n) - 15 ;
+
+var ball = 0;
+
+var answer_algdop = [];
+
+for (var i = 0; i < n; i++) {
+    answer_algdop[i] = [];
+}
+
+answer_algdop = Algebraicheskie_dopolnenia(A);
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        var given_answer = document.getElementById('alg_dop'+k+'_'+i+'_'+j).value;
+        var given_answer_field = document.getElementById('alg_dop'+k+'_'+i+'_'+j);
+        if (given_answer == answer_algdop[i][j]) {
+           ball +=1;
+           given_answer_field.setAttribute("style", "color: green; width: "+w+"%;");
+        }
+        else {
+            given_answer_field.setAttribute("style", "color: red; width: "+w+"%;")
+        }
+    }
+}
+
+var vsego_zadach = n*n;
+var percent_right = Math.floor(100*ball/vsego_zadach);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+
+
+
+
+function proverit_reverse_matrix(A,k) {
+
+var w = Math.floor(100/n) - 6 ;
+
+var ball = 0;
+
+var answer_reverse_matrix = [];
+
+for (var i = 0; i < n; i++) {
+    answer_reverse_matrix[i] = [];
+}
+
+answer_reverse_matrix = Reverse_Matrix(A);
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        var given_answer = eval(document.getElementById('reverse_matrix'+k+'_'+i+'_'+j).value.replace(',','.'));
+        var given_answer_field = document.getElementById('reverse_matrix'+k+'_'+i+'_'+j);
+        if (given_answer == answer_reverse_matrix[i][j]) {
+           ball +=1;
+           given_answer_field.setAttribute("style", "color: green; width: "+w+"%;");
+        }
+        else {
+            given_answer_field.setAttribute("style", "color: red; width: "+w+"%;")
+        }
+    }
+}
+
+var vsego_zadach = n*n;
+var percent_right = Math.floor(100*ball/vsego_zadach);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+
+
+
+
+function proverit_answer(A,B,C,D) {
+
+var w = Math.floor(100/n) - 6 ;
+
+var ball = 0;
+
+var answerX = [];
+var matrix_subtraction_minus = [];
+for (var i = 0; i < n; i++) {
+    answerX[i] = [];
+    matrix_subtraction_minus[i] = [];
+}
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        matrix_subtraction_minus[i][j] = C[i][j]-D[i][j];
+    }
+}
+
+
+answerX = Product_Matrix(Product_Matrix(Reverse_Matrix(A),matrix_subtraction_minus,n,n,n),Reverse_Matrix(B),n,n,n);
+
+for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+        var given_answer = eval(document.getElementById('answer_'+i+'_'+j).value.replace(',','.'));
+        var given_answer_field = document.getElementById('answer_'+i+'_'+j);
+        if (given_answer == answerX[i][j]) {
+           ball +=1;
+           given_answer_field.setAttribute("style", "color: green; width: "+w+"%;");
+        }
+        else {
+            given_answer_field.setAttribute("style", "color: red; width: "+w+"%;")
+        }
+    }
+}
+
+var vsego_zadach = n*n;
+var percent_right = Math.floor(100*ball/vsego_zadach);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+
+
+function proverit_answer_system() {
+
+var ball = 0;
+
+var answer_reverse_matrix = [];
+
+for (var i = 0; i < n; i++) {
+    answer_reverse_matrix[i] = [];
+}
+
+answer_reverse_matrix = Reverse_Matrix(matrix_1);
+
+var answer_system = [];
+
+for (var i = 0; i < n; i++) {
+    answer_system[i] = 0;
+    for (var j = 0; j < n; j++) {
+        answer_system[i] = answer_system[i] + answer_reverse_matrix[i][j]*right_part[j];
+    }
+}
+
+
+for (var i = 0; i < n; i++) {
+    var given_answer = eval(document.getElementById('answer_system_'+i).value.replace(',','.'));
+    var given_answer_field = document.getElementById('answer_system_'+i);
+    if (Math.abs(given_answer - answer_system[i]) < 0.00001) {
+       ball +=1;
+       given_answer_field.setAttribute("style", "color: green; width: 90%;")
+    }
+    else {
+       given_answer_field.setAttribute("style", "color: red; width: 90%;")
+    }
+}
+
+var vsego_zadach = n;
+var percent_right = Math.floor(100*ball/vsego_zadach);
+
+if (percent_right == 100){
+    document.getElementById('rezultat').innerHTML = "Отлично!";
+}
+
+if (percent_right < 100){
+    document.getElementById('rezultat').innerHTML = "Хорошо, но нужно внимательней!";
+}
+
+if (percent_right < 75){
+    document.getElementById('rezultat').innerHTML = "Есть, куда стремиться!";
+}
+
+if (percent_right < 25){
+    document.getElementById('rezultat').innerHTML = "Учите!";
+}
+
+}
+
+
+</script>
+
+</body>
+</html>
